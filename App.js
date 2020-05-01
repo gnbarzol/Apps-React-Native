@@ -1,15 +1,20 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, FlatList, TouchableHighlight, TouchableWithoutFeedback, Keyboard, Platform} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableHighlight,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
+} from 'react-native';
 import Cita from './components/Cita';
 import Formulario from './components/Formulario';
 
 const App = () => {
   //Definimos el state
-  const [citas, setCitas] = useState([
-    // {id: '1', paciente: 'Chiki', propietario: 'Gary', sintomas: 'No come'},
-    // {id: '2', paciente: 'Niño', propietario: 'Gary', sintomas: 'Es bobo'},
-    // {id: '3', paciente: 'Fran', propietario: 'Gary', sintomas: 'No hace nada'},
-  ]);
+  const [citas, setCitas] = useState([]);
 
   const [vistaFormulario, setVistaFormulario] = useState(false);
 
@@ -20,11 +25,11 @@ const App = () => {
 
   const mostrarContenido = () => {
     setVistaFormulario(!vistaFormulario);
-  }
+  };
 
   const cerrarTeclado = () => {
     Keyboard.dismiss();
-  }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={() => cerrarTeclado()}>
@@ -38,8 +43,7 @@ const App = () => {
               style={styles.btnMostrarForm}>
               <Text style={styles.txtMostrarForm}>{vistaFormulario ? 'Ver Citas':'Crear nueva Cita'}</Text>
             </TouchableHighlight>
-          </View> 
-          
+          </View>
           {vistaFormulario ? (
             <>
               <Text style={styles.subtitulo}>Crea una nueva Cita</Text>
@@ -51,7 +55,11 @@ const App = () => {
             </>
           ) : (
             <>
-              <Text style={styles.subtitulo}>{ citas.length > 0 ? 'Administra tus citas':'Agrega una nueva cita'}</Text>
+              <Text style={styles.subtitulo}>
+                {citas.length > 0
+                  ? 'Administra tus citas'
+                  : 'Agrega una nueva cita'}
+              </Text>
               <FlatList
                 data={citas}
                 renderItem={cita => (
@@ -62,7 +70,6 @@ const App = () => {
             </>
           )}
         </View>
-        
       </View>
     </TouchableWithoutFeedback>
   );
@@ -98,14 +105,14 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
     backgroundColor: '#ffa41b',
-    marginVertical: 10, 
+    marginVertical: 10,
   },
   txtMostrarForm: {
     color: 'white',
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 15,
-}
+  },
 });
 
 export default App;
