@@ -10,11 +10,11 @@ const Cita = ({cita, eliminarCita}) => {
       </View>
       <View style={styles.cita_item}>
         <Text style={styles.label}>Propietario: </Text>
-        <Text style={styles.texto}>{cita.propietario}</Text>
+        <Text style={styles.texto}>{cita.dueño}</Text>
       </View>
       <View style={styles.cita_item}>
         <Text style={styles.label}>Sintomas: </Text>
-        <Text style={styles.texto}>{cita.sintomas}</Text>
+        <Text style={styles.texto}>{cita.sintoma}</Text>
       </View>
       {/* <Button title="Eliminar" /> */}
       <View>

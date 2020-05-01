@@ -1,43 +1,70 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import {View, Text, StyleSheet, FlatList, TouchableHighlight, TouchableWithoutFeedback, Keyboard, Platform} from 'react-native';
 import Cita from './components/Cita';
+import Formulario from './components/Formulario';
 
 const App = () => {
   //Definimos el state
   const [citas, setCitas] = useState([
-    {id: '1', paciente: 'Chiki', propietario: 'Gary', sintomas: 'No come'},
-    {id: '2', paciente: 'Niño', propietario: 'Gary', sintomas: 'Es bobo'},
-    {id: '3', paciente: 'Fran', propietario: 'Gary', sintomas: 'No hace nada'},
+    // {id: '1', paciente: 'Chiki', propietario: 'Gary', sintomas: 'No come'},
+    // {id: '2', paciente: 'Niño', propietario: 'Gary', sintomas: 'Es bobo'},
+    // {id: '3', paciente: 'Fran', propietario: 'Gary', sintomas: 'No hace nada'},
   ]);
+
+  const [vistaFormulario, setVistaFormulario] = useState(false);
 
   const eliminarCita = id => {
     console.log('Eliminado...', id);
     setCitas(citasActuales => citasActuales.filter(cita => cita.id !== id));
   };
 
+  const mostrarContenido = () => {
+    setVistaFormulario(!vistaFormulario);
+  }
+
+  const cerrarTeclado = () => {
+    Keyboard.dismiss();
+  }
+
   return (
-    <>
+    <TouchableWithoutFeedback onPress={() => cerrarTeclado()}>
       <View style={styles.container}>
         <Text style={styles.titulo}>Administrador de citas</Text>
 
-        {citas.length > 0 ? (
-          <Text style={styles.subtitulo}>Administra tus citas</Text>
-        ) : (
-          <Text style={styles.subtitulo}>No hay citas</Text>
-        )}
-
-        <FlatList
-          data={citas}
-          renderItem={cita => (
-            <Cita cita={cita.item} eliminarCita={eliminarCita} />
+        <View style={styles.contenido}>
+          <View>
+            <TouchableHighlight
+              onPress={() => mostrarContenido()}
+              style={styles.btnMostrarForm}>
+              <Text style={styles.txtMostrarForm}>{vistaFormulario ? 'Ver Citas':'Crear nueva Cita'}</Text>
+            </TouchableHighlight>
+          </View> 
+          
+          {vistaFormulario ? (
+            <>
+              <Text style={styles.subtitulo}>Crea una nueva Cita</Text>
+              <Formulario 
+                citas={citas}
+                setCitas={setCitas}
+                setVista={setVistaFormulario}
+              />
+            </>
+          ) : (
+            <>
+              <Text style={styles.subtitulo}>{ citas.length > 0 ? 'Administra tus citas':'Agrega una nueva cita'}</Text>
+              <FlatList
+                data={citas}
+                renderItem={cita => (
+                  <Cita cita={cita.item} eliminarCita={eliminarCita} />
+                )}
+                keyExtractor={cita => cita.id}
+              />
+            </>
           )}
-          keyExtractor={cita => cita.id}
-        />
-        {/* {citas.map(cita => (
-          <Text key={cita.id}>{cita.paciente}</Text>
-        ))} */}
+        </View>
+        
       </View>
-    </>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -49,7 +76,7 @@ const styles = StyleSheet.create({
   titulo: {
     textAlign: 'center',
     color: '#FFF',
-    marginTop: 45,
+    marginTop: Platform.OS === 'ios' ? 45 : 20,
     marginBottom: 20,
     fontSize: 22,
     fontWeight: 'bold',
@@ -61,6 +88,24 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
+  contenido: {
+    flex: 1,
+    marginHorizontal: '2.5%',
+  },
+  btnMostrarForm: {
+    padding: 6,
+    borderColor: '#ffa41b',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    backgroundColor: '#ffa41b',
+    marginVertical: 10, 
+  },
+  txtMostrarForm: {
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 15,
+}
 });
 
 export default App;
